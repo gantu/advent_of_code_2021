@@ -26,10 +26,29 @@ def getFreqByColumn(digitsList: List[List[Char]], index: Int): Map[Char, Int] = 
 def getGammaDigit(digitsList: List[List[Char]], index: Int): Char = { 
       val digitsMap =  getFreqByColumn(digitsList, index)                 
       if (digitsMap.get('0').get > digitsMap.get('1').get) '0' else '1'                
-    }
+}
 
 def getEpsilonDigit(digitsList: List[List[Char]], index: Int): Char = { 
       val digitsMap =  getFreqByColumn(digitsList, index)                 
-      if (digitsMap.get('0').get < digitsMap.get('1').get) '0' else '1'                
+      if (digitsMap.get('0').get <= digitsMap.get('1').get) '0' else '1'                
     }
 val lines = Source.fromFile("/home/wild/projects/scala_projects/day1/input_3.txt").getLines.toList.map(l=>l.toList)
+
+def getOxygenRate(index: Int, digitsList: List[List[Char]]): List[Char] = {
+  if (digitsList.size == 1) digitsList(0)
+  else {
+    val gammaDigit = getGammaDigit(digitsList, index)
+    getOxygenRate(index + 1, digitsList.filter(l => l(index) == gammaDigit))
+  }
+}
+
+
+def getCarbonRate(index: Int, digitsList: List[List[Char]]): List[Char] = {
+  if (digitsList.size == 1) digitsList(0)
+  else {
+    val epsilonDigit = getEpsilonDigit(digitsList, index)
+    getOxygenRate(index + 1, digitsList.filter(l => l(index) == epsilonDigit))
+  }
+}
+
+
